@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.excel.mapper.BeanMapper">
+
+    <insert id="insertToTable" parameterType="java.util.List">
+        INSERT INTO #{TableName} (#{Columns}) VALUES
+        <foreach collection="Values" item="item" index="index" open="(" separator="),(" close=")">
+            #{item}
+        </foreach>
+    </insert>
+
+    <update id="createTable" parameterType="java.util.Map">
+        CREATE TABLE #{Map.tableName} (
+            ID BIGINT not null,
+            <foreach collection="Map.tableParams" item="item" index="index">
+                ${item},
+            </foreach>
+            PRIMARY KEY (ID)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    </update>
+
+    <update id="dropTable" parameterType="java.lang.String">
+        DROP TABLE #{TableName}
+    </update>
+
+    <delete id="deleteFromTable">
+        DELETE FROM #{TableName} WHERE ID IN
+        <foreach collection="Ids" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="selectTable" resultType="java.lang.String">
+        SHOW TABLES
+    </select>
+
+</mapper>
